@@ -1,7 +1,7 @@
 package com.example.smoothiemenu;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
 
     private Button checkOutButton;
+    private Button addNewSmoothy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.list_smoothies);
         checkOutButton = (Button) findViewById(R.id.checkOutButton);
+        addNewSmoothy = (Button) findViewById(R.id.addNewSmoothy);
 
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CheckedTextView checkedTextView = (CheckedTextView) view;
                 boolean currentChecked = checkedTextView.isChecked();
-                Smoothy smoothy = (Smoothy)listView.getItemAtPosition(position);
+                Smoothy smoothy = (Smoothy) listView.getItemAtPosition(position);
                 smoothy.setActive(!currentChecked);
             }
         });
@@ -43,29 +45,35 @@ public class MainActivity extends AppCompatActivity {
         Smoothy mango = new Smoothy("mango", 20);
         Smoothy strawberry = new Smoothy("strawberry", 20);
 
-        Smoothy[] menu = new Smoothy[]{sapoche,mango,strawberry};
+        Smoothy[] menu = new Smoothy[]{sapoche, mango, strawberry};
 
-        ArrayAdapter<Smoothy> arrayAdapter = new ArrayAdapter<Smoothy>(this, android.R.layout.simple_list_item_multiple_choice , menu);
+        ArrayAdapter<Smoothy> arrayAdapter = new ArrayAdapter<Smoothy>(this, android.R.layout.simple_list_item_multiple_choice, menu);
 
         listView.setAdapter(arrayAdapter);
 
-        for(int i =0 ;i< menu.length; i++){
+        for (int i = 0; i < menu.length; i++) {
             listView.setItemChecked(i, menu[i].isActive());
         }
 
+        addNewSmoothy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
     }
 
-    public void checkOut(View view){
+    public void checkOut(View view) {
         SparseBooleanArray sp = listView.getCheckedItemPositions();
-        int totalAmount = 0 ;
+        int totalAmount = 0;
         StringBuilder sb = new StringBuilder();
-        for(int i=0;i<sp.size(); i++){
-            if(sp.valueAt(i) == true){
+        for (int i = 0; i < sp.size(); i++) {
+            if (sp.valueAt(i) == true) {
                 Smoothy smoothy = (Smoothy) listView.getItemAtPosition(i);
                 totalAmount += smoothy.getSmoothyPrice();
             }
         }
         sb.append(totalAmount);
-        Toast.makeText(this, "Total price : "+sb.toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Total price : " + sb.toString(), Toast.LENGTH_LONG).show();
     }
 }
